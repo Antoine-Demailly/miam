@@ -16,11 +16,13 @@ function MessengerController() {
   ///////
 
   self.verifyToken = 'dkjlAsdlksjA';
+  self.miamAccessToken = 'EAAa5IqH3a3oBAMpW1ZBixILA8RjEXlwOZAF7tC82xqR4GUOuaZA4vZBOhRCw4qq0CptmAzsfz8SCPzW5DyhJh33qM4sNy0by53fepgMrpQqKLAWKTevc46ewoZCb2ZA9FtkYRyZBZCk65mGnLZBMVJ4IS5gUWWbhYDwA1XZAjgtNnwFQZDZD';
+
   self.postBackURL = [
     'https://graph.facebook.com',
     '/v2.6/me/messages',
     '?access_token=',
-    self.verifyToken
+    self.miamAccessToken
   ].join('');
 
   /// Public Methods
