@@ -1,20 +1,9 @@
 'use strict';
 
-const request = require('request');
-const _       = require('lodash');
-
-const APIKey  = 'AIzaSyC-fD1eyEoTju7sSVy0hMCSeU4jeJIJ0CY';
-const Host    = 'https://maps.googleapis.com/';
+const PlacesModel = require('./places.model.js');
 
 function PlacesController() {
   let self = this;
-
-  self.location   = '48.866096,2.373295';
-
-  self.parameters = '?location=' +  self.location;
-  self.parameters += '&radius=500&type=restaurant';
-  self.parameters += '&key=' + APIKey;
-
 
   function init() {
     // You can remove it and init() if you don't need initialization function
@@ -35,19 +24,12 @@ function PlacesController() {
   self.patchPlaces = patchPlaces;
 
   function getPlaces(req, res) {
+    let latitude = 48.866096;
+    let longitude = 2.373295;
 
-    let url = Host + '/maps/api/place/nearbysearch/json' + self.parameters;
-    console.log(url);
-    request.get(url, function(error, response, body) {
-
-      if (!error) {
-        let places = JSON.parse(body);
-
-        _.forEach(places.results, function(place) {
-          console.log(place.name);
-        });
-
-      }
+    PlacesModel.fetchRestaurants(latitude, longitude)
+    .then(function(restaurants) {
+      console.log(restaurants);
     });
 
   }
