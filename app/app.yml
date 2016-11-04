@@ -10,6 +10,7 @@ dependencies:
     # - bodyparser
   components:
     - layout
+    - places
 
 databases:
   main:
