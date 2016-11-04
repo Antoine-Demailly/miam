@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 function MessengerController() {
   let self = this;
 
@@ -12,7 +14,7 @@ function MessengerController() {
   /// Attributes
   ///////
 
-  self.attribute1 = '';
+  self.verifiyToken = 'dkjlAsdlksjA';
 
   /// Public Methods
   ///////
@@ -21,12 +23,28 @@ function MessengerController() {
   self.postMessenger  = postMessenger;
   self.patchMessenger = patchMessenger;
 
-  function getMessenger() {
+  function getMessenger(req, res) {
+    if (req.query['hub.verify_token'] == self.verifiyToken) {
+      return res.send(req.query['hub.challenge']);
+    }
 
+    res.send('not ok');
   }
 
-  function postMessenger() {
+  function postMessenger(req, res) {
+    console.log('body', req.body);
 
+    if (_.isUndefined(req.body.entry) || !_.isArray(req.body.entry)) {
+      res.send('ok');
+    }
+
+    _.forEach(req.body.entry, function(entry) {
+      _.forEach(entry.messaging, function(messaging) {
+        console.log('messaging', messaging);
+      });
+    });
+
+    res.send('ok');
   }
 
   function patchMessenger() {
