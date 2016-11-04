@@ -1,7 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
-const request = require('request');
+// const request = require('request');
+const unirest = require('unirest');
 
 function MessengerController() {
   let self = this;
@@ -53,28 +54,43 @@ function MessengerController() {
     let messaging = entry.messaging[0];
     // console.log('entry', entry, 'messaging', messaging);
 
-    var options = {
-      method: 'POST',
-      url: self.postBackURL,
-      headers: {
-        'content-type': 'application/json'
+    // var options = {
+    //   method: 'POST',
+    //   url: self.postBackURL,
+    //   headers: {
+    //     'content-type': 'application/json'
+    //   },
+    //   body: {
+    //     recipient: {
+    //       id: messaging.sender.id
+    //     },
+    //     message: {
+    //       text: 'Bonjour toi !'
+    //     }
+    //   }
+    // };
+
+    let options = {
+      recipient: {
+        id: messaging.sender.id
       },
-      body: {
-        recipient: {
-          id: messaging.sender.id
-        },
-        message: {
-          text: 'Bonjour toi !'
-        }
+      message: {
+        text: 'Bonjour toi !'
       }
     };
 
-    console.log('here', options);
+    // request(options, function(err, httpResponse, body) {
+    //   console.log('err', err);
+    //   console.log('bodyResponse', body);
+    // });
 
-    request(options, function(err, httpResponse, body) {
-      console.log('err', err);
-      console.log('bodyResponse', body);
-    });
+    unirest.post(self.postBackURL)
+      .header('content-type', 'application/json')
+      .send(options)
+      .end(function(response) {
+        console.log('response code', response.status);
+        console.log('response', response.body);
+      });
   }
 
   function patchMessenger() {
