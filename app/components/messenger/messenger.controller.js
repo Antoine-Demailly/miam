@@ -1,8 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
-// const request = require('request');
 const unirest = require('unirest');
+const PlacesModel = require('./../places/places.model.js');
 
 function MessengerController() {
   let self = this;
@@ -54,23 +54,38 @@ function MessengerController() {
     let messaging = entry.messaging[0];
     // console.log('entry', entry, 'messaging', messaging);
 
-    let options = {
-      recipient: {
-        id: messaging.sender.id
-      },
-      message: {
-        text: 'Bonjour toi !'
-      }
-    };
+    let latitude = 48.866096;
+    let longitude = 2.373295;
 
-    console.log('options', options);
+    PlacesModel.fetchRestaurants(latitude, longitude)
+      .then(function(restaurants) {
 
-    unirest.post(self.postBackURL)
-      .header('content-type', 'application/json')
-      .send(options)
-      .end(function(response) {
-        console.log('response code', response.status);
-        console.log('response', response.body);
+        let options = {
+          recipient: {
+            id: messaging.sender.id
+          },
+          message: {
+            attachment: {
+              type: 'template',
+              payload: {
+                template_type: 'button',
+                text: 'What do you want to eat ?',
+                buttons: restaurants
+              },
+            }
+          }
+        };
+
+        console.log('options', options);
+
+        unirest.post(self.postBackURL)
+          .header('content-type', 'application/json')
+          .send(options)
+          .end(function(response) {
+            console.log('response code', response.status);
+            console.log('response', response.body);
+          });
+
       });
   }
 
