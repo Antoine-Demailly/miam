@@ -50,38 +50,45 @@ function MessengerController() {
 
     let entry = req.body.entry[0];
     let messaging = entry.messaging[0];
-    console.log('messaging', messaging);
 
-    let latitude = 48.866096;
-    let longitude = 2.373295;
+    let message = messaging.message.text;
 
-    PlacesModel.fetchRestaurants(latitude, longitude)
-      .then(function(restaurants) {
+    if (!_.isUndefined(message) && message.toLowerCase() == 'miam') {
+      return askLocation(messaging);
+    }
 
-        let options = {
-          recipient: {
-            id: messaging.sender.id
-          },
-          message: {
-            attachment: {
-              type: 'template',
-              payload: {
-                template_type: 'button',
-                text: 'What do you want to eat ?',
-                buttons: _.chunk(restaurants, 3)[0]
-              },
+    let attachment = messaging.message.attachments;
+    let coordinates = attachment[0].payload.coordinates;
+
+    if (!_.isUndefined(coordinates)) {
+      PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
+        .then(function(restaurants) {
+
+          let options = {
+            recipient: {
+              id: messaging.sender.id
+            },
+            message: {
+              attachment: {
+                type: 'template',
+                payload: {
+                  template_type: 'button',
+                  text: 'What do you want to eat ?',
+                  buttons: _.chunk(restaurants, 3)[0]
+                },
+              }
             }
-          }
-        };
+          };
 
-        unirest.post(self.postBackURL)
-          .header('content-type', 'application/json')
-          .send(options)
-          .end(function(response) {
-            console.log('ok');
-          });
+          unirest.post(self.postBackURL)
+            .header('content-type', 'application/json')
+            .send(options)
+            .end(function(response) {
+              console.log('ok');
+            });
 
-      });
+        });
+    }
   }
 
   function patchMessenger() {
@@ -90,6 +97,29 @@ function MessengerController() {
 
   /// Private Methods
   ///////
+
+  function askLocation(messaging) {
+    let options = {
+      recipient: {
+        id: messaging.sender.id
+      },
+      message: {
+        text: 'Please share your location:',
+        quick_replies: [
+          {
+            content_type: 'location',
+          }
+        ]
+      }
+    };
+
+    unirest.post(self.postBackURL)
+      .header('content-type', 'application/json')
+      .send(options)
+      .end(function(response) {
+        console.log('ok');
+      });
+  }
 
   function privateMethodMessenger() {
     /*
