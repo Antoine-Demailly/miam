@@ -51,6 +51,7 @@ function MessengerController() {
     let entry = req.body.entry[0];
     let messaging = entry.messaging[0];
 
+    console.log(messaging);
     let message = messaging.message.text;
 
     if (!_.isUndefined(message) && message.toLowerCase() == 'miam') {
