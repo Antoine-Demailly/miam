@@ -33,7 +33,6 @@ function MessengerController() {
 
   function postMessenger(req, res) {
     console.log('body', req.body);
-    console.log('headers', req.headers);
 
     if (_.isUndefined(req.body.entry) || !_.isArray(req.body.entry)) {
       res.send('ok');
