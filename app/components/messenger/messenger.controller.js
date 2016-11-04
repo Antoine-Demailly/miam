@@ -42,8 +42,6 @@ function MessengerController() {
   }
 
   function postMessenger(req, res) {
-    console.log('body', req.body);
-
     res.send('ok');
 
     if (_.isUndefined(req.body.entry) || !_.isArray(req.body.entry)) {
@@ -52,7 +50,7 @@ function MessengerController() {
 
     let entry = req.body.entry[0];
     let messaging = entry.messaging[0];
-    console.log('entry', entry, 'messaging', messaging);
+    console.log('messaging', messaging);
 
     let latitude = 48.866096;
     let longitude = 2.373295;

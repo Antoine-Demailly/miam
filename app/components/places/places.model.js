@@ -34,7 +34,7 @@ function PlacesModel() {
               title: place.name,
               payload: place.vicinity});
           });
-          console.log(restaurants);
+          // console.log(restaurants);
           // Resolve the promise
           resolve(restaurants);
         } else {
