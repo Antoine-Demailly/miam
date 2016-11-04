@@ -70,7 +70,7 @@ function MessengerController() {
               payload: {
                 template_type: 'button',
                 text: 'What do you want to eat ?',
-                buttons: restaurants
+                buttons: _.chunk(restaurants, 3)[0]
               },
             }
           }
