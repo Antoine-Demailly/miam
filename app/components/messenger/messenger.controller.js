@@ -50,7 +50,6 @@ function MessengerController() {
 
     let entry = req.body.entry[0];
     let messaging = entry.messaging[0];
-    console.log('messaging', messaging);
 
     let message = messaging.message.text;
 
@@ -59,39 +58,37 @@ function MessengerController() {
     }
 
     let attachment = messaging.message.attachments;
-    console.log(attachment);
-    console.log('coordinates', attachment[0].payload.coordinates);
+    let coordinates = attachment[0].payload.coordinates;
 
-    let latitude = 48.866096;
-    let longitude = 2.373295;
+    if (!_.isUndefined(coordinates)) {
+      PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
+        .then(function(restaurants) {
 
-    PlacesModel.fetchRestaurants(latitude, longitude)
-      .then(function(restaurants) {
-
-        let options = {
-          recipient: {
-            id: messaging.sender.id
-          },
-          message: {
-            attachment: {
-              type: 'template',
-              payload: {
-                template_type: 'button',
-                text: 'What do you want to eat ?',
-                buttons: _.chunk(restaurants, 3)[0]
-              },
+          let options = {
+            recipient: {
+              id: messaging.sender.id
+            },
+            message: {
+              attachment: {
+                type: 'template',
+                payload: {
+                  template_type: 'button',
+                  text: 'What do you want to eat ?',
+                  buttons: _.chunk(restaurants, 3)[0]
+                },
+              }
             }
-          }
-        };
+          };
 
-        unirest.post(self.postBackURL)
-          .header('content-type', 'application/json')
-          .send(options)
-          .end(function(response) {
-            console.log('ok');
-          });
+          unirest.post(self.postBackURL)
+            .header('content-type', 'application/json')
+            .send(options)
+            .end(function(response) {
+              console.log('ok');
+            });
 
-      });
+        });
+    }
   }
 
   function patchMessenger() {
