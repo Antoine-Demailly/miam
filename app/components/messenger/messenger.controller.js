@@ -54,7 +54,7 @@ function MessengerController() {
     console.log(messaging);
 
     if (!_.isUndefined(messaging.message)) {
-      let message = messaging.message.text;
+      var message = messaging.message.text;
     }
 
     if (!_.isUndefined(messaging.postback) && !_.isUndefined(messaging.postback.payload)) {
