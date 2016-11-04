@@ -36,6 +36,8 @@ function PlacesModel() {
           });
           // console.log(restaurants);
           // Resolve the promise
+          restaurants = _.shuffle(restaurants);
+          restaurants = _.chunk(restaurants, 3)[0];
           resolve(restaurants);
         } else {
 
