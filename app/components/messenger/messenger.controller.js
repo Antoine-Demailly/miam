@@ -54,22 +54,6 @@ function MessengerController() {
     let messaging = entry.messaging[0];
     // console.log('entry', entry, 'messaging', messaging);
 
-    // var options = {
-    //   method: 'POST',
-    //   url: self.postBackURL,
-    //   headers: {
-    //     'content-type': 'application/json'
-    //   },
-    //   body: {
-    //     recipient: {
-    //       id: messaging.sender.id
-    //     },
-    //     message: {
-    //       text: 'Bonjour toi !'
-    //     }
-    //   }
-    // };
-
     let options = {
       recipient: {
         id: messaging.sender.id
@@ -79,10 +63,7 @@ function MessengerController() {
       }
     };
 
-    // request(options, function(err, httpResponse, body) {
-    //   console.log('err', err);
-    //   console.log('bodyResponse', body);
-    // });
+    console.log('options', options);
 
     unirest.post(self.postBackURL)
       .header('content-type', 'application/json')
