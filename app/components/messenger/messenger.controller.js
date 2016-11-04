@@ -69,6 +69,8 @@ function MessengerController() {
       }
     };
 
+    console.log('here');
+
     request(options, function(err, httpResponse, body) {
       console.log('err', err);
       console.log('bodyResponse', body);
