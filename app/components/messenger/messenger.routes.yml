@@ -1,8 +1,6 @@
 Messenger:
   method:
     - GET
-    - POST
-    - PATCH
   path: /messenger
   controller: MessengerController
   middlewares:

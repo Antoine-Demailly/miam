@@ -12,7 +12,7 @@ function MessengerController() {
   /// Attributes
   ///////
 
-  self.attribute1 = '';
+  self.verifiyToken = 'dkjlAsdlksjA';
 
   /// Public Methods
   ///////
@@ -21,8 +21,12 @@ function MessengerController() {
   self.postMessenger  = postMessenger;
   self.patchMessenger = patchMessenger;
 
-  function getMessenger() {
+  function getMessenger(req, res) {
+    if (req.query['hub.verify_token'] == self.verifiyToken) {
+      res.send(req.query['hub.chalenge']);
+    }
 
+    res.send('not ok');
   }
 
   function postMessenger() {
