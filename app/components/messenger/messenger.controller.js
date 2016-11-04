@@ -48,7 +48,7 @@ function MessengerController() {
     }
 
     let entry = req.body.entry[0];
-    let messaging = entry[0];
+    let messaging = entry.messaging[0];
     console.log('entry', entry, 'messaging', messaging);
 
     request.post(self.postBackURL, {
