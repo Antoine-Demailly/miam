@@ -39,7 +39,9 @@ function MessengerController() {
     }
 
     _.forEach(req.body.entry, function(entry) {
-      console.log(entry, entry.messaging);
+      _.forEach(entry.messaging, function(messaging) {
+        console.log('messaging', messaging);
+      });
     });
 
     res.send('ok');
