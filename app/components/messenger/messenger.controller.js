@@ -60,7 +60,6 @@ function MessengerController() {
       },
     }, function(err, httpResponse, body) {
       console.log('err', err);
-      console.log('httpResponse', httpResponse);
       console.log('bodyResponse', body);
     });
   }
