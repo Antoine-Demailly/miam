@@ -22,9 +22,8 @@ function MessengerController() {
   self.patchMessenger = patchMessenger;
 
   function getMessenger(req, res) {
-    console.log(req.query);
     if (req.query['hub.verify_token'] == self.verifiyToken) {
-      return res.send(req.query['hub.chalenge']);
+      return res.send(req.query['hub.challenge']);
     }
 
     res.send('not ok');
