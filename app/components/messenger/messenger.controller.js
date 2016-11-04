@@ -61,33 +61,7 @@ function MessengerController() {
     let coordinates = attachment[0].payload.coordinates;
 
     if (!_.isUndefined(coordinates)) {
-      PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
-        .then(function(restaurants) {
-
-          let options = {
-            recipient: {
-              id: messaging.sender.id
-            },
-            message: {
-              attachment: {
-                type: 'template',
-                payload: {
-                  template_type: 'button',
-                  text: 'What do you want to eat ?',
-                  buttons: _.chunk(restaurants, 3)[0]
-                },
-              }
-            }
-          };
-
-          unirest.post(self.postBackURL)
-            .header('content-type', 'application/json')
-            .send(options)
-            .end(function(response) {
-              console.log('ok');
-            });
-
-        });
+      fetchRestaurants(messaging, coordinates);
     }
   }
 
@@ -97,6 +71,36 @@ function MessengerController() {
 
   /// Private Methods
   ///////
+
+  function fetchRestaurants(messaging, coordinates) {
+    PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
+      .then(function(restaurants) {
+
+        let options = {
+          recipient: {
+            id: messaging.sender.id
+          },
+          message: {
+            attachment: {
+              type: 'template',
+              payload: {
+                template_type: 'button',
+                text: 'What do you want to eat ?',
+                buttons: _.chunk(restaurants, 3)[0]
+              },
+            }
+          }
+        };
+
+        unirest.post(self.postBackURL)
+          .header('content-type', 'application/json')
+          .send(options)
+          .end(function(response) {
+            console.log('ok');
+          });
+
+      });
+  }
 
   function askLocation(messaging) {
     let options = {
