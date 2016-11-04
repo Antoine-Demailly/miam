@@ -42,7 +42,7 @@ function MessengerController() {
   }
 
   function postMessenger(req, res) {
-    // console.log('body', req.body);
+    console.log('body', req.body);
 
     res.send('ok');
 
@@ -52,7 +52,7 @@ function MessengerController() {
 
     let entry = req.body.entry[0];
     let messaging = entry.messaging[0];
-    // console.log('entry', entry, 'messaging', messaging);
+    console.log('entry', entry, 'messaging', messaging);
 
     let latitude = 48.866096;
     let longitude = 2.373295;
@@ -76,14 +76,11 @@ function MessengerController() {
           }
         };
 
-        console.log('options', options);
-
         unirest.post(self.postBackURL)
           .header('content-type', 'application/json')
           .send(options)
           .end(function(response) {
-            console.log('response code', response.status);
-            console.log('response', response.body);
+            console.log('ok');
           });
 
       });
