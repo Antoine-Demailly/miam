@@ -59,7 +59,7 @@ function MessengerController() {
 
     let attachment = messaging.message.attachments;
 
-    if (!_.isUndefined(attachment) && !_.isUndefined(coordinates)) {
+    if (!_.isUndefined(attachment) && !_.isUndefined(attachment[0].payload.coordinates)) {
       let coordinates = attachment[0].payload.coordinates;
       fetchRestaurants(messaging, coordinates);
     }
