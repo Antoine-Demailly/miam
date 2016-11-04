@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 function MessengerController() {
   let self = this;
 
@@ -32,6 +34,14 @@ function MessengerController() {
   function postMessenger(req, res) {
     console.log('body', req.body);
     console.log('headers', req.headers);
+
+    if (_.isUndefined(req.body.entry) || !_.isArray(req.body.entry)) {
+      res.send('ok');
+    }
+
+    _.forEach(req.body.entry, function(entry) {
+      console.log(entry, entry.messaging);
+    });
 
     res.send('ok');
   }
