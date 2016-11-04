@@ -52,7 +52,14 @@ function MessengerController() {
     let messaging = entry.messaging[0];
 
     console.log(messaging);
-    let message = messaging.message.text;
+
+    if (!_.isUndefined(messaging.message)) {
+      let message = messaging.message.text;
+    }
+
+    if (!_.isUndefined(messaging.postback) && !_.isUndefined(messaging.postback.payload)) {
+      return sendAddress(messaging, messaging.postback.payload);
+    }
 
     if (!_.isUndefined(message) && message.toLowerCase() == 'miam') {
       return askLocation(messaging);
@@ -72,6 +79,29 @@ function MessengerController() {
 
   /// Private Methods
   ///////
+
+  function sendAddress(messaging, payload) {
+    let message = [
+      'Address of your restaurant:',
+      payload
+    ].join(' ');
+
+    let options = {
+      recipient: {
+        id: messaging.sender.id
+      },
+      message: {
+        text: message,
+      }
+    };
+
+    unirest.post(self.postBackURL)
+      .header('content-type', 'application/json')
+      .send(options)
+      .end(function(response) {
+        console.log('ok');
+      });
+  }
 
   function fetchRestaurants(messaging, coordinates) {
     PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
