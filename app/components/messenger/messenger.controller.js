@@ -60,6 +60,7 @@ function MessengerController() {
 
     let attachment = messaging.message.attachments;
     console.log(attachment);
+    console.log('coordinates', attachment[0].payload.coordinates);
 
     let latitude = 48.866096;
     let longitude = 2.373295;
