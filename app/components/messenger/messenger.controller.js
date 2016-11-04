@@ -52,6 +52,12 @@ function MessengerController() {
     let messaging = entry.messaging[0];
     console.log('messaging', messaging);
 
+    let message = messaging.message.text;
+
+    if (message.toLowerCase() == 'miam') {
+      return askLocation(messaging);
+    }
+
     let latitude = 48.866096;
     let longitude = 2.373295;
 
@@ -90,6 +96,29 @@ function MessengerController() {
 
   /// Private Methods
   ///////
+
+  function askLocation(messaging) {
+    let options = {
+      recipient: {
+        id: messaging.sender.id
+      },
+      message: {
+        text: 'Please share your location:',
+        quick_replies: [
+          {
+            content_type: location,
+          }
+        ]
+      }
+    };
+
+    unirest.post(self.postBackURL)
+      .header('content-type', 'application/json')
+      .send(options)
+      .end(function(response) {
+        console.log('ok');
+      });
+  }
 
   function privateMethodMessenger() {
     /*
