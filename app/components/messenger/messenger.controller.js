@@ -29,8 +29,11 @@ function MessengerController() {
     res.send('not ok');
   }
 
-  function postMessenger() {
+  function postMessenger(req, res) {
+    console.log('body', req.body);
+    console.log('headers', req.headers);
 
+    res.send('ok');
   }
 
   function patchMessenger() {
