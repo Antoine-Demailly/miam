@@ -61,11 +61,11 @@ function MessengerController() {
       },
       body: {
         recipient: {
-          id: messaging.sender.id,
+          id: messaging.sender.id
         },
         message: {
-          text: 'Bonjour toi !',
-        },
+          text: 'Bonjour toi !'
+        }
       }
     };
 
