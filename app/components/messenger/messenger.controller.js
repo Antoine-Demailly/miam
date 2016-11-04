@@ -54,9 +54,12 @@ function MessengerController() {
 
     let message = messaging.message.text;
 
-    if (message.toLowerCase() == 'miam') {
+    if (!_.isUndefined(message) && message.toLowerCase() == 'miam') {
       return askLocation(messaging);
     }
+
+    let attachment = messaging.message.attachments;
+    console.log(attachment);
 
     let latitude = 48.866096;
     let longitude = 2.373295;
