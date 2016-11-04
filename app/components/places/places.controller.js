@@ -1,6 +1,6 @@
 'use strict';
 
-function ExampleController() {
+function PlacesController() {
   let self = this;
 
   function init() {
@@ -17,19 +17,19 @@ function ExampleController() {
   /// Public Methods
   ///////
 
-  self.getExample   = getExample;
-  self.postExample  = postExample;
-  self.patchExample = patchExample;
+  self.getPlaces   = getPlaces;
+  self.postPlaces  = postPlaces;
+  self.patchPlaces = patchPlaces;
 
-  function getExample() {
-
-  }
-
-  function postExample() {
+  function getPlaces() {
 
   }
 
-  function patchExample() {
+  function postPlaces() {
+
+  }
+
+  function patchPlaces() {
 
   }
 
@@ -43,4 +43,4 @@ function ExampleController() {
   }
 }
 
-module.exports = ExampleController;
+module.exports = PlacesController;

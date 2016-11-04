@@ -1,10 +1,8 @@
-Example:
+Places:
   method:
     - GET
     - POST
     - PATCH
-  path: /example
-  controller: ExampleController
+  path: /places
+  controller: PlacesController
   middlewares:
-    - example
-    - example2

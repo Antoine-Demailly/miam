@@ -1,6 +1,6 @@
 'use strict';
 
-function ExampleController() {
+function SMSController() {
   let self = this;
 
   function init() {
@@ -17,19 +17,19 @@ function ExampleController() {
   /// Public Methods
   ///////
 
-  self.getExample   = getExample;
-  self.postExample  = postExample;
-  self.patchExample = patchExample;
+  self.getSMS   = getSMS;
+  self.postSMS  = postSMS;
+  self.patchSMS = patchSMS;
 
-  function getExample() {
-
-  }
-
-  function postExample() {
+  function getSMS() {
 
   }
 
-  function patchExample() {
+  function postSMS() {
+
+  }
+
+  function patchSMS() {
 
   }
 
@@ -43,4 +43,4 @@ function ExampleController() {
   }
 }
 
-module.exports = ExampleController;
+module.exports = SMSController;
