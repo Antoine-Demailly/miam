@@ -1,6 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
+// const request = require('request');
+const unirest = require('unirest');
 
 function MessengerController() {
   let self = this;
@@ -14,7 +16,15 @@ function MessengerController() {
   /// Attributes
   ///////
 
-  self.verifiyToken = 'dkjlAsdlksjA';
+  self.verifyToken = 'dkjlAsdlksjA';
+  self.miamAccessToken = 'EAAa5IqH3a3oBAMpW1ZBixILA8RjEXlwOZAF7tC82xqR4GUOuaZA4vZBOhRCw4qq0CptmAzsfz8SCPzW5DyhJh33qM4sNy0by53fepgMrpQqKLAWKTevc46ewoZCb2ZA9FtkYRyZBZCk65mGnLZBMVJ4IS5gUWWbhYDwA1XZAjgtNnwFQZDZD';
+
+  self.postBackURL = [
+    'https://graph.facebook.com',
+    '/v2.6/me/messages',
+    '?access_token=',
+    self.miamAccessToken
+  ].join('');
 
   /// Public Methods
   ///////
@@ -24,7 +34,7 @@ function MessengerController() {
   self.patchMessenger = patchMessenger;
 
   function getMessenger(req, res) {
-    if (req.query['hub.verify_token'] == self.verifiyToken) {
+    if (req.query['hub.verify_token'] == self.verifyToken) {
       return res.send(req.query['hub.challenge']);
     }
 
@@ -32,19 +42,55 @@ function MessengerController() {
   }
 
   function postMessenger(req, res) {
-    console.log('body', req.body);
-
-    if (_.isUndefined(req.body.entry) || !_.isArray(req.body.entry)) {
-      res.send('ok');
-    }
-
-    _.forEach(req.body.entry, function(entry) {
-      _.forEach(entry.messaging, function(messaging) {
-        console.log('messaging', messaging);
-      });
-    });
+    // console.log('body', req.body);
 
     res.send('ok');
+
+    if (_.isUndefined(req.body.entry) || !_.isArray(req.body.entry)) {
+      return;
+    }
+
+    let entry = req.body.entry[0];
+    let messaging = entry.messaging[0];
+    // console.log('entry', entry, 'messaging', messaging);
+
+    // var options = {
+    //   method: 'POST',
+    //   url: self.postBackURL,
+    //   headers: {
+    //     'content-type': 'application/json'
+    //   },
+    //   body: {
+    //     recipient: {
+    //       id: messaging.sender.id
+    //     },
+    //     message: {
+    //       text: 'Bonjour toi !'
+    //     }
+    //   }
+    // };
+
+    let options = {
+      recipient: {
+        id: messaging.sender.id
+      },
+      message: {
+        text: 'Bonjour toi !'
+      }
+    };
+
+    // request(options, function(err, httpResponse, body) {
+    //   console.log('err', err);
+    //   console.log('bodyResponse', body);
+    // });
+
+    unirest.post(self.postBackURL)
+      .header('content-type', 'application/json')
+      .send(options)
+      .end(function(response) {
+        console.log('response code', response.status);
+        console.log('response', response.body);
+      });
   }
 
   function patchMessenger() {
