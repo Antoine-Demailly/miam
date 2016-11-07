@@ -57,6 +57,8 @@ function PlacesModel() {
 
         _.forEach(response.body.businesses, function(place) {
 
+          console.log('place', place.phone, place.id);
+
           let buttons = [
             {
               type:    'phone_number',
