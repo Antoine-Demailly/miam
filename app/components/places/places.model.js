@@ -56,24 +56,27 @@ function PlacesModel() {
       .end(function(response) {
 
         _.forEach(response.body.businesses, function(place) {
+          let buttons = [];
 
-          console.log('place', place.phone, place.id);
+          buttons.push({
+            type: 'element_share'
+          });
 
-          let buttons = [
-            {
+          if (!_.isUndefined(place.phone)) {
+            buttons.push({
               type:    'phone_number',
               title:   'Call the restaurant',
               payload: place.phone
-            },
-            {
+            });
+          }
+
+          if (!_.isUndefined(place.id)) {
+            buttons.push({
               type:    'postback',
               title:   'Bookmark Item',
               payload: place.id
-            },
-            {
-              type: 'element_share'
-            }
-          ];
+            });
+          }
 
           restaurants.push({
             title:     place.name,
