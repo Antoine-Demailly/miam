@@ -105,7 +105,7 @@ function PlacesModel() {
     });
 
     if (categories.lenght != 0) {
-      desc    += categories.join(', ');
+      desc    += categories.join(', ') + '\n';
     }
 
     desc += 'Rating: ' + place.rating + '\n';
