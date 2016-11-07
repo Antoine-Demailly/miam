@@ -106,7 +106,6 @@ function MessengerController() {
   function fetchRestaurants(messaging, coordinates) {
     PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
       .then(function(restaurants) {
-
         let options = {
           recipient: {
             id: messaging.sender.id
