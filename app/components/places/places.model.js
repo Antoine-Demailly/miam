@@ -45,54 +45,63 @@ function PlacesModel() {
   self.fetchGoogleRestaurants = fetchGoogleRestaurants;
 
   function fetchRestaurants(latitude, longitude, categories = 'restaurants', radius = 500) {
-    // let parameters = {latitude: latitude, longitude: longitude, radius: radius,categories: categories};
     let parameters = {latitude: latitude, longitude: longitude, categories: categories};
 
+    if (radius) {
+      parameters.radius = radius;
+    }
+
     return new Promise(function(resolve, reject) {
-      let restaurants = [];
-
       unirest.get('https://api.yelp.com/v3/businesses/search')
-      .headers({'Authorization': 'Bearer ' + self.yelpAPIKey})
-      .query(parameters)
-      .end(function(response) {
-
-        _.forEach(response.body.businesses, function(place) {
-          let location = place.location;
-          let buttons  = [];
-
-          if (!_.isUndefined(place.phone)) {
-            buttons.push({
-              type:    'phone_number',
-              title:   'Call Restaurant',
-              payload: place.phone
-            });
+        .headers({'Authorization': 'Bearer ' + self.yelpAPIKey})
+        .query(parameters)
+        .end(function(response) {
+          if (response.body.businesses.length < 10 && radius != false) {
+            return fetchRestaurants(latitude, longitude, categories, false)
+              .then(function(restaurants) {
+                resolve(restaurants);
+              }) ;
           }
 
-          if (!_.isUndefined(location)) {
+          let restaurants = [];
+
+          _.forEach(response.body.businesses, function(place) {
+            let location = place.location;
+            let buttons  = [];
+
+            if (!_.isUndefined(place.phone)) {
+              buttons.push({
+                type:    'phone_number',
+                title:   'Call Restaurant',
+                payload: place.phone
+              });
+            }
+
+            if (!_.isUndefined(location)) {
+              buttons.push({
+                type:    'postback',
+                title:   'Itinerary',
+                payload: location.address1 + ', ' + location.zip_code + ', ' + location.city
+              });
+            }
+
             buttons.push({
-              type:    'postback',
-              title:   'Itinerary',
-              payload: location.address1 + ', ' + location.zip_code + ', ' + location.city
+              type: 'element_share'
             });
-          }
 
-          buttons.push({
-            type: 'element_share'
+            restaurants.push({
+              title:     place.name,
+              image_url: place.image_url,
+              subtitle:  formatDescription(place),
+              buttons:   buttons
+            });
           });
 
-          restaurants.push({
-            title:     place.name,
-            image_url: place.image_url,
-            subtitle:  formatDescription(place),
-            buttons:   buttons
-          });
+          restaurants = _.shuffle(restaurants);
+          restaurants = _.chunk(restaurants, 10)[0];
+
+          resolve(restaurants);
         });
-
-        restaurants = _.shuffle(restaurants);
-        restaurants = _.chunk(restaurants, 10)[0];
-
-        resolve(restaurants);
-      });
 
     });
   }
