@@ -56,32 +56,33 @@ function PlacesModel() {
       .end(function(response) {
 
         _.forEach(response.body.businesses, function(place) {
-          let buttons = [];
+          let location = place.location;
+          let buttons  = [];
+
+          if (!_.isUndefined(place.phone)) {
+            buttons.push({
+              type:    'phone_number',
+              title:   'Call Restaurant',
+              payload: place.phone
+            });
+          }
+
+          if (!_.isUndefined(location)) {
+            buttons.push({
+              type:    'postback',
+              title:   'Itinerary',
+              payload: location.address1 + ', ' + location.zip_code + ', ' + location.city
+            });
+          }
 
           buttons.push({
             type: 'element_share'
           });
 
-          if (!_.isUndefined(place.phone)) {
-            buttons.push({
-              type:    'phone_number',
-              title:   'Call the restaurant',
-              payload: place.phone
-            });
-          }
-
-          if (!_.isUndefined(place.id)) {
-            buttons.push({
-              type:    'postback',
-              title:   'Bookmark Item',
-              payload: place.id
-            });
-          }
-
           restaurants.push({
             title:     place.name,
             image_url: place.image_url,
-            subtitle:  formatDescription(place.rating, place.price),
+            subtitle:  formatDescription(place),
             buttons:   buttons
           });
         });
@@ -95,16 +96,27 @@ function PlacesModel() {
     });
   }
 
-  function formatDescription(rating, price) {
-    let desc = '';
-    desc += 'Rating: ' + rating + '\n';
+  function formatDescription(place) {
+    let categories = [];
+    let desc       = '';
+
+    _.forEach(place.categories, function(category) {
+      categories.push(category.title);
+    });
+
+    if (categories.lenght != 0) {
+      desc    += categories.join(', ');
+    }
+
+    desc += 'Rating: ' + place.rating + '\n';
 
     // let rate = Math.ceil(rating);
     // desc    += Array(rate).fill('&#9733;').join('');
     // desc    += Array(5 - rate).fill('&#9734;').join('');
     // desc    += '\n';
 
-    desc    += 'Price: ' + price;
+    desc += 'Price: ' + place.price;
+    desc += 'Distance: ' + Math.floor(place.distance) + 'm' + '\n';
     return desc;
   }
 
