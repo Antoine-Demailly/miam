@@ -13,7 +13,7 @@ function PlacesModel() {
 
   function init() {
     yelpOauth2().then(function(token) {
-      fetchRestaurants(48.866096, 2.373295);
+      // fetchRestaurants(48.866096, 2.373295);
     });
 
   }
@@ -40,6 +40,7 @@ function PlacesModel() {
   }
 
   /// Public Methods
+  self.fetchRestaurants = fetchRestaurants;
   self.fetchGoogleRestaurants = fetchGoogleRestaurants;
 
   function fetchRestaurants(latitude, longitude, categories = 'restaurants', radius = 500) {
