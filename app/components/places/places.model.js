@@ -57,7 +57,10 @@ function PlacesModel() {
         .query(parameters)
         .end(function(response) {
           if (response.body.businesses.length < 10 && radius != false) {
-            return fetchRestaurants(latitude, longitude, categories, false);
+            return fetchRestaurants(latitude, longitude, categories, false)
+              .then(function(restaurants) {
+                resolve(restaurants);
+              }) ;
           }
 
           let restaurants = [];
