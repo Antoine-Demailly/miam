@@ -115,9 +115,8 @@ function MessengerController() {
             attachment: {
               type: 'template',
               payload: {
-                template_type: 'button',
-                text: 'What do you want to eat ?',
-                buttons: _.chunk(restaurants, 3)[0]
+                template_type: 'generic',
+                elements: restaurants
               },
             }
           }
