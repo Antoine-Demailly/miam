@@ -115,7 +115,7 @@ function PlacesModel() {
     // desc    += Array(5 - rate).fill('&#9734;').join('');
     // desc    += '\n';
 
-    desc += 'Price: ' + place.price;
+    desc += 'Price: ' + place.price + '\n';
     desc += 'Distance: ' + Math.floor(place.distance) + 'm' + '\n';
     return desc;
   }
