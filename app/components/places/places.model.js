@@ -73,11 +73,14 @@ function PlacesModel() {
 
   function formatDescription(rating, price) {
     let desc = '';
-    let rate = Math.ceil(rating);
-    desc    += Array(rate).fill('&#9733;').join('');
-    desc    += Array(5 - rate).fill('&#9734;').join('');
-    desc    += '\n';
-    desc    += price;
+    desc += rating + '/5\n';
+
+    // let rate = Math.ceil(rating);
+    // desc    += Array(rate).fill('&#9733;').join('');
+    // desc    += Array(5 - rate).fill('&#9734;').join('');
+    // desc    += '\n';
+
+    desc    += 'Budget: ' + price;
     return desc;
   }
 
