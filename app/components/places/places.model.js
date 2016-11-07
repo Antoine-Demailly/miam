@@ -123,7 +123,7 @@ function PlacesModel() {
     // desc    += '\n';
 
     desc += 'Price: ' + place.price;
-    desc += 'Distance: ' + Math.floor(place.distance) + 'm' + '\n';
+    // desc += 'Distance: ' + Math.floor(place.distance) + 'm' + '\n';
     return desc;
   }
 
