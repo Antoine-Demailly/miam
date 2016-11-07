@@ -45,7 +45,8 @@ function PlacesModel() {
   self.fetchGoogleRestaurants = fetchGoogleRestaurants;
 
   function fetchRestaurants(latitude, longitude, categories = 'restaurants', radius = 500) {
-    let parameters = {latitude: latitude, longitude: longitude, radius: radius,categories: categories};
+    // let parameters = {latitude: latitude, longitude: longitude, radius: radius,categories: categories};
+    let parameters = {latitude: latitude, longitude: longitude, categories: categories};
 
     return new Promise(function(resolve, reject) {
       let restaurants = [];
