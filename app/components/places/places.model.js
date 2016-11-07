@@ -13,6 +13,7 @@ function PlacesModel() {
 
   function init() {
     yelpOauth2().then(function(token) {
+      // console.log(token);
       // fetchRestaurants(48.866096, 2.373295);
     });
 
@@ -22,7 +23,7 @@ function PlacesModel() {
 
   /// Private Methods
   function yelpOauth2() {
-    var body =  {
+    let body =  {
       grant_type:    'client_credentials',
       client_id:     'cJbX-C_kjpnQ8FoRbbfUgQ',
       client_secret: 'LAmyZ33FiKz2i4j3tV0kxtTiCcKAw5I00HtqUwWaDBhnUfF22tOA4ljspFE8rzNB'
@@ -55,17 +56,35 @@ function PlacesModel() {
       .end(function(response) {
 
         _.forEach(response.body.businesses, function(place) {
+
+          let buttons = [
+            {
+              type:    'phone_number',
+              title:   'Call the restaurant',
+              payload: place.phone
+            },
+            {
+              type:    'postback',
+              title:   'Bookmark Item',
+              payload: place.id
+            },
+            {
+              type: 'element_share'
+            }
+          ];
+
           restaurants.push({
             title:     place.name,
             image_url: place.image_url,
-            subtitle:  formatDescription(place.rating, place.price)
+            subtitle:  formatDescription(place.rating, place.price),
+            buttons:   buttons
           });
         });
 
         restaurants = _.shuffle(restaurants);
         restaurants = _.chunk(restaurants, 10)[0];
+
         resolve(restaurants);
-        console.log(restaurants);
       });
 
     });
