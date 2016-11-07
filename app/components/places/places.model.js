@@ -56,7 +56,7 @@ function PlacesModel() {
         .headers({'Authorization': 'Bearer ' + self.yelpAPIKey})
         .query(parameters)
         .end(function(response) {
-          if (response.body.length < 10 && radius != false) {
+          if (response.body.businesses.length < 10 && radius != false) {
             return fetchRestaurants(latitude, longitude, categories, false);
           }
 
