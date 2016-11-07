@@ -1,8 +1,0 @@
-SMS:
-  method:
-    - GET
-    - POST
-    - PATCH
-  path: /example
-  controller: ExampleController
-  middlewares:
