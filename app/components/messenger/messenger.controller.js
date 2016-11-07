@@ -137,7 +137,7 @@ function MessengerController() {
         id: messaging.sender.id
       },
       message: {
-        text: 'Please share your location:',
+        text: 'What is your location ?',
         quick_replies: [
           {
             content_type: 'location',
