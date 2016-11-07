@@ -51,43 +51,25 @@ function MessengerController() {
     let entry = req.body.entry[0];
     let messaging = entry.messaging[0];
 
-    let message = messaging.message.text;
+    console.log(messaging);
+
+    if (!_.isUndefined(messaging.message)) {
+      var message = messaging.message.text;
+    }
+
+    if (!_.isUndefined(messaging.postback) && !_.isUndefined(messaging.postback.payload)) {
+      return sendAddress(messaging, messaging.postback.payload);
+    }
 
     if (!_.isUndefined(message) && message.toLowerCase() == 'miam') {
       return askLocation(messaging);
     }
 
     let attachment = messaging.message.attachments;
-    let coordinates = attachment[0].payload.coordinates;
 
-    if (!_.isUndefined(coordinates)) {
-      PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
-        .then(function(restaurants) {
-
-          let options = {
-            recipient: {
-              id: messaging.sender.id
-            },
-            message: {
-              attachment: {
-                type: 'template',
-                payload: {
-                  template_type: 'button',
-                  text: 'What do you want to eat ?',
-                  buttons: _.chunk(restaurants, 3)[0]
-                },
-              }
-            }
-          };
-
-          unirest.post(self.postBackURL)
-            .header('content-type', 'application/json')
-            .send(options)
-            .end(function(response) {
-              console.log('ok');
-            });
-
-        });
+    if (!_.isUndefined(attachment) && !_.isUndefined(attachment[0].payload.coordinates)) {
+      let coordinates = attachment[0].payload.coordinates;
+      fetchRestaurants(messaging, coordinates);
     }
   }
 
@@ -97,6 +79,59 @@ function MessengerController() {
 
   /// Private Methods
   ///////
+
+  function sendAddress(messaging, payload) {
+    let message = [
+      'Address of your restaurant:',
+      payload
+    ].join(' ');
+
+    let options = {
+      recipient: {
+        id: messaging.sender.id
+      },
+      message: {
+        text: message,
+      }
+    };
+
+    unirest.post(self.postBackURL)
+      .header('content-type', 'application/json')
+      .send(options)
+      .end(function(response) {
+        console.log('ok');
+      });
+  }
+
+  function fetchRestaurants(messaging, coordinates) {
+    PlacesModel.fetchRestaurants(coordinates.lat, coordinates.long)
+      .then(function(restaurants) {
+
+        let options = {
+          recipient: {
+            id: messaging.sender.id
+          },
+          message: {
+            attachment: {
+              type: 'template',
+              payload: {
+                template_type: 'button',
+                text: 'What do you want to eat ?',
+                buttons: _.chunk(restaurants, 3)[0]
+              },
+            }
+          }
+        };
+
+        unirest.post(self.postBackURL)
+          .header('content-type', 'application/json')
+          .send(options)
+          .end(function(response) {
+            console.log('ok');
+          });
+
+      });
+  }
 
   function askLocation(messaging) {
     let options = {
