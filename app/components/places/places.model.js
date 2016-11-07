@@ -114,7 +114,7 @@ function PlacesModel() {
       categories.push(category.title);
     });
 
-    if (categories.lenght != 0) {
+    if (categories.length != 0) {
       desc    += categories.join(', ') + '\n';
     }
 
@@ -125,7 +125,8 @@ function PlacesModel() {
     // desc    += Array(5 - rate).fill('&#9734;').join('');
     // desc    += '\n';
 
-    desc += 'Price: ' + place.price;
+    let price = !_.isUndefined(place.price) ? place.price : 'Inconnu';
+    desc += 'Price: ' + price;
     // desc += 'Distance: ' + Math.floor(place.distance) + 'm' + '\n';
     return desc;
   }
